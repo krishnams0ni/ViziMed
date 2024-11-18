@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Patient Logs
+{% endblock %}
+
+{% block content %}
+    <form action="{{ url_for('patient_logs', id=patient_id) }}" method="post">
+        <input type="text" name="date" placeholder="Enter date" required>
+        <textarea name="notes" placeholder="Enter notes" required></textarea>
+        <input type="submit" value="Add Log">
+    </form>
+
+    <div>
+        <h3>ID {{ patient_id }}: {{ name }} Logs</h3>
+        {% for log in logs %}
+            <div>
+                <strong>{{ log.date }}</strong>:
+                {{ log.notes }}
+                <a href="{{ url_for('delete_log', id=log.id) }}">Delete</a>
+            </div>
+        {% else %}
+            <p>No logs found.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

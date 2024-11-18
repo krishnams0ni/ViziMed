@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <div class="cards">
+        {% for patient in info %}
+            <div class="card">
+                <div class="remove">
+                    <a href="{{ url_for('remove_patient', id=patient.id) }}">
+                        <div>Remove</div>
+                    </a>
+                </div>
+                <a href="{{ url_for('patient_logs', id=patient.id) }}">{{ patient.name }}</a>
+
+                <form id="edit-form-{{ patient.id }}" method="POST"
+                      action="{{ url_for('edit_patient', id=patient.id) }}">
+                    <div class="patient-detail" id="dob-{{ patient.id }}">
+                        <span class="patient_info">DoB:</span>
+                        <span class="text">{{ patient.dob }}</span>
+                        <input type="text" name="dob" class="edit-input" value="{{ patient.dob }}"
+                               style="display:none;">
+                    </div>
+
+                    <div class="patient-detail" id="phone-{{ patient.id }}">
+                        <span class="patient_info">Phone:</span>
+                        <span class="text">{{ patient.phone }}</span>
+                        <input type="text" name="phone" class="edit-input" value="{{ patient.phone }}"
+                               style="display:none;">
+                    </div>
+
+                    <div class="patient-detail" id="email-{{ patient.id }}">
+                        <span class="patient_info">Email:</span>
+                        <span class="text">{{ patient.email }}</span>
+                        <input type="text" name="email" class="edit-input" value="{{ patient.email }}"
+                               style="display:none;">
+                    </div>
+
+                    <div class="patient-detail" id="address-{{ patient.id }}">
+                        <span class="patient_info">Address:</span>
+                        <span class="text">{{ patient.address }}</span>
+                        <input type="text" name="address" class="edit-input" value="{{ patient.address }}"
+                               style="display:none;">
+                    </div>
+
+                    <a class="edit" href="#" onclick="toggleEdit('{{ patient.id }}', event)">
+                        Edit
+                    </a>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function toggleEdit(patientId, event) {
+            event.preventDefault();
+            let form = document.getElementById('edit-form-' + patientId);
+            let editLink = form.querySelector('.edit');
+            let inputs = form.querySelectorAll('.edit-input');
+            let texts = form.querySelectorAll('.text');
+
+            if (editLink.innerText === 'Edit') {
+                inputs.forEach(input => input.style.display = 'inline-block');
+                texts.forEach(text => text.style.display = 'none');
+                editLink.innerText = 'Save';
+            } else {
+                form.submit();
+            }
+        }
+    </script>
+{% endblock %}

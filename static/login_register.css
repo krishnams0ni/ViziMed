@@ -1,0 +1,39 @@
+form {
+    margin: 0 auto;
+    width: 250px;
+    padding: 1em;
+    border: 1px solid #CCC;
+    border-radius: 1em;
+    text-align: center;
+}
+
+div {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    width: 200px;
+    padding: 0.5em;
+    margin: 0.5em 0;
+}
+
+input[type="submit"] {
+    width: 50%;
+    background-color: #333;
+    color: #efefef;
+    border-radius: 0.5em;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #444;
+}
+
+a {
+    color: #e0e0e0;
+    display: inline-block;
+    text-decoration: none;
+}

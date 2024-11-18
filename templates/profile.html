@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    User Profile
+{% endblock %}
+
+{% block content %}
+    Username: {{ name }}
+    <br>
+    Password: {{ password }}
+    <br><br>
+    <div>
+        Update Username:
+        <form action="/profile" method="post">
+            <input type="text" name="username" id="username" placeholder="Username">
+            <input type="submit" value="Update">
+        </form>
+        Update Password:
+        <form action="/profile" method="post">
+            <input type="password" name="password" id="password" placeholder="Password">
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+            <input type="submit" value="Update">
+        </form>
+    </div>
+    <a href="{{ url_for('delete_account') }}">
+        Delete Account
+    </a>
+{% endblock %}

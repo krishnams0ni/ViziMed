@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='universal.css') }}">
+</head>
+<body>
+<div class="flash">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {{ messages[0] }}
+        {% endif %}
+    {% endwith %}
+</div>
+<div id="menu">
+    <a href="{{ url_for('dashboard') }}">
+        <div>Dashboard</div>
+    </a>
+    <a href="{{ url_for('add_patient') }}">
+        <div>Add Patient</div>
+    </a>
+    <a href="{{ url_for('profile') }}">
+        <div>Profile</div>
+    </a>
+    <a href="{{ url_for('logout') }}">
+        <div>Logout</div>
+    </a>
+</div>
+
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

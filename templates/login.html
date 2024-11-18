@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='universal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='login_register.css') }}">
 </head>
 <body>
-<div class="flash">
+<div class="flash {% if get_flashed_messages() %}visible{% endif %}">
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
+            {{ messages[0] }}
         {% endif %}
     {% endwith %}
 </div>

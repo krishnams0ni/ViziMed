@@ -16,9 +16,13 @@ def confirm_patient_identity(id):
 
 def register_routes(app):
     @app.route('/')
-    def show_login():
-        flash("Welcome back!")
-        return render_template("login.html")
+    def init():
+        if check_credentials():
+            flash("You are already logged in")
+            return redirect(url_for('dashboard'))
+        else:
+            flash("Welcome back!")
+            return render_template("login.html")
 
 
     @app.route('/login', methods=['POST', 'GET'])
@@ -81,6 +85,8 @@ def register_routes(app):
             new_username = request.form.get("username")
             user = User.query.filter_by(id=id).first()
 
+            if not new_password and not new_username:
+                flash("Please fill at least one field")
             if new_password:
                 confirm_password = request.form.get("confirm_password")
                 if new_password != confirm_password:
@@ -169,6 +175,7 @@ def register_routes(app):
             patient.phone = request.form.get("phone") or patient.phone
             patient.email = request.form.get("email") or patient.email
             patient.address = request.form.get("address") or patient.address
+            patient.name = request.form.get("name") or patient.name
             db.session.commit()
             flash("Patient details updated successfully")
         return redirect(url_for('dashboard'))

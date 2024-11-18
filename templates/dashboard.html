@@ -5,15 +5,18 @@
     <div class="cards">
         {% for patient in info %}
             <div class="card">
-                <div class="remove">
-                    <a href="{{ url_for('remove_patient', id=patient.id) }}">
-                        <div>Remove</div>
-                    </a>
-                </div>
-                <a href="{{ url_for('patient_logs', id=patient.id) }}">{{ patient.name }}</a>
-
+                <a class="patient_name" href="{{ url_for('patient_logs', id=patient.id) }}">{{ patient.name }}</a>
                 <form id="edit-form-{{ patient.id }}" method="POST"
                       action="{{ url_for('edit_patient', id=patient.id) }}">
+
+                    <div class="patient-detail" id="name-{{ patient.id }}">
+                        <span class="patient_info">Name:</span>
+                        <span class="text">{{ patient.name }}</span>
+                        <input type="text" name="name" class="edit-input" value="{{ patient.name }}"
+                               style="display:none;">
+                    </div>
+
+
                     <div class="patient-detail" id="dob-{{ patient.id }}">
                         <span class="patient_info">DoB:</span>
                         <span class="text">{{ patient.dob }}</span>
@@ -41,10 +44,13 @@
                         <input type="text" name="address" class="edit-input" value="{{ patient.address }}"
                                style="display:none;">
                     </div>
-
+                    <div class="options">
+                    <a class="remove" href="{{ url_for('remove_patient', id=patient.id) }}">
+                        Remove
+                    </a>
                     <a class="edit" href="#" onclick="toggleEdit('{{ patient.id }}', event)">
                         Edit
-                    </a>
+                    </a></div>
                 </form>
             </div>
         {% endfor %}

@@ -5,24 +5,31 @@
 {% endblock %}
 
 {% block content %}
-    Username: {{ name }}
-    <br>
-    Password: {{ password }}
-    <br><br>
-    <div>
-        Update Username:
-        <form action="/profile" method="post">
-            <input type="text" name="username" id="username" placeholder="Username">
-            <input type="submit" value="Update">
-        </form>
-        Update Password:
-        <form action="/profile" method="post">
-            <input type="password" name="password" id="password" placeholder="Password">
-            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
-            <input type="submit" value="Update">
-        </form>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+    <div class="existing_details">
+        <p>Current Username: {{ name }}</p>
+        <p>Current Password: {{ password }}</p>
     </div>
-    <a href="{{ url_for('delete_account') }}">
-        Delete Account
-    </a>
+    <hr>
+    <div class="update_details">
+        <div>
+            <p>Update Username:</p>
+            <form action="/profile" method="post">
+                <input type="text" name="username" id="username" placeholder="Username">
+                <input type="submit" value="Update">
+            </form>
+        </div>
+        <div>
+            <p>Update Password:</p>
+            <form action="/profile" method="post">
+                <input type="password" name="password" id="password" placeholder="Password">
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                <input type="submit" value="Update">
+            </form>
+        </div>
+        <hr>
+        <a id="delete_account" href="{{ url_for('delete_account') }}">
+            Delete Account
+        </a>
+    </div>
 {% endblock %}

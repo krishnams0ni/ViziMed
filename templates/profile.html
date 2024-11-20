@@ -16,7 +16,7 @@
             <p>Update Username:</p>
             <form action="/profile" method="post">
                 <input type="text" name="username" id="username" placeholder="Username">
-                <input type="submit" value="Update">
+                <input class="button" type="submit" value="Update">
             </form>
         </div>
         <div>
@@ -24,12 +24,12 @@
             <form action="/profile" method="post">
                 <input type="password" name="password" id="password" placeholder="Password">
                 <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
-                <input type="submit" value="Update">
+                <input class="button" type="submit" value="Update">
             </form>
         </div>
         <hr>
         <a id="delete_account" href="{{ url_for('delete_account') }}">
-            Delete Account
+            <button class="button">Delete Account</button>
         </a>
     </div>
 {% endblock %}

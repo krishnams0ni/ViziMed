@@ -24,7 +24,6 @@ def register_routes(app):
             flash("Welcome back!")
             return render_template("login.html")
 
-
     @app.route('/login', methods=['POST', 'GET'])
     def login():
         if request.method == 'POST':
@@ -42,7 +41,6 @@ def register_routes(app):
         else:
             flash("Welcome back!")
         return render_template("login.html")
-
 
     @app.route('/register', methods=['POST', 'GET'])
     def register():
@@ -65,14 +63,12 @@ def register_routes(app):
                 return render_template('login.html')
         return render_template("register.html")
 
-
     @app.route('/dashboard')
     def dashboard():
         if not check_credentials(): return redirect(url_for('login'))
         info = User.query.filter_by(id=session['user_id']).first().patients
         flash("Patients retrieved successfully")
         return render_template("dashboard.html", info=info)
-
 
     @app.route('/profile', methods=['POST', 'GET'])
     def profile():
@@ -107,7 +103,6 @@ def register_routes(app):
             return redirect(url_for('profile'))
         return render_template("profile.html", name=name, password=password)
 
-
     @app.route('/add_patient', methods=['POST', 'GET'])
     def add_patient():
         if not check_credentials(): return redirect(url_for('login'))
@@ -124,7 +119,6 @@ def register_routes(app):
             db.session.commit()
             flash("Patient added successfully")
         return render_template("add_patient.html")
-
 
     @app.route('/remove_patient/<int:id>', methods=['GET'])
     def remove_patient(id):
@@ -163,6 +157,17 @@ def register_routes(app):
         logs = PatientLog.query.filter_by(patient_id=id).all()
         return render_template("patient_logs.html", logs=logs, patient_id=id, name=Patient.query.filter_by(id=id).first().name)
 
+    @app.route('/update_log/<int:id>', methods=['POST', 'GET'])
+    def update_log(id):
+        if not check_credentials(): return redirect(url_for('login'))
+        log = PatientLog.query.filter_by(id=id).first()
+        if request.method == 'POST':
+            log.date = request.form.get("date") or log.date
+            log.notes = request.form.get("notes") or log.notes
+            db.session.commit()
+            flash("Log updated successfully")
+            return redirect(url_for('patient_logs', id=log.patient_id))
+        return render_template("patient_logs.html", log=log)
 
     @app.route('/edit_patient/<int:id>', methods=['POST', 'GET'])
     def edit_patient(id):
@@ -180,7 +185,6 @@ def register_routes(app):
             flash("Patient details updated successfully")
         return redirect(url_for('dashboard'))
 
-
     @app.route('/delete_log/<int:id>', methods=['GET'])
     def delete_log(id):
         if not check_credentials(): return redirect(url_for('login'))
@@ -190,13 +194,11 @@ def register_routes(app):
         flash("Log deleted successfully")
         return redirect(url_for('patient_logs', id=log.patient_id))
 
-
     @app.route('/logout')
     def logout():
         session.pop('user_id', None)
         flash("Logged out successfully")
         return redirect(url_for('login'))
-
 
     @app.route('/delete_account')
     def delete_account():

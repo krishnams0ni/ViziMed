@@ -32,5 +32,12 @@
 <div id="content">
     {% block content %}{% endblock %}
 </div>
+
+<script>
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
+</script>
 </body>
 </html>

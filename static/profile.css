@@ -10,15 +10,6 @@ div form {
     width: min-content;
 }
 
-input[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 5px;
-    cursor: pointer;
-    width: 100px;
-}
 
 #delete_acount {
     background-color: #ce4f45;

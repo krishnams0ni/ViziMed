@@ -28,11 +28,3 @@ input {
     margin: 0.5em;
     width: 100%;
 }
-
-input[type="submit"] {
-    width: 100px;
-    background-color: #333;
-    color: #efefef;
-    border-radius: 0.5em;
-    cursor: pointer;
-}

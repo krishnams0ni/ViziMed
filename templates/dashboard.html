@@ -2,6 +2,10 @@
 
 {% block content %}
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    {% if not info %}
+        <p>No patients found.</p>
+    {% endif %}
+
     <div class="cards">
         {% for patient in info %}
             <div class="card">
@@ -15,7 +19,6 @@
                         <input type="text" name="name" class="edit-input" value="{{ patient.name }}"
                                style="display:none;">
                     </div>
-
 
                     <div class="patient-detail" id="dob-{{ patient.id }}">
                         <span class="patient_info">DoB:</span>
@@ -45,12 +48,13 @@
                                style="display:none;">
                     </div>
                     <div class="options">
-                    <a class="remove" href="{{ url_for('remove_patient', id=patient.id) }}">
-                        Remove
-                    </a>
-                    <a class="edit" href="#" onclick="toggleEdit('{{ patient.id }}', event)">
-                        Edit
-                    </a></div>
+                        <a class="remove button" href="{{ url_for('remove_patient', id=patient.id) }}">
+                            Remove
+                        </a>
+                        <a class="edit button" href="#" onclick="toggleEdit('{{ patient.id }}', event)">
+                            Edit
+                        </a>
+                    </div>
                 </form>
             </div>
         {% endfor %}

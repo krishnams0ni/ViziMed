@@ -4,8 +4,8 @@
     border: 1px solid #e7e7e7;
     border-radius: 4px;
     flex-direction: row;
-    gap: 1rem;
     padding: 0.5rem;
+    gap: 0.5rem;
 }
 
 .log div:first-child {
@@ -16,14 +16,20 @@
     flex: 8;
 }
 
-.log div input, .log div textarea {
-    width: max-content;
+.log div textarea {
+    width: 100%;
 }
 
 .options {
     display: flex;
     justify-content: space-between;
     align-items: end;
+    gap: 0.5rem;
+}
+
+.options a {
+    width: 100%;
+    margin: 0;
 }
 
 .remove {
@@ -37,6 +43,7 @@
 .log-header {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
     justify-content: space-between;
 }
 
@@ -57,5 +64,37 @@
 textarea {
     width: 100%;
     height: 300px;
-    overflow-y: scroll;
+    overflow-y: hidden;
+}
+
+.images {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #e7e7e7;
+    border-radius: 4px;
+    width: fit-content;
+    padding: 0.2rem;
+}
+
+.images a {
+    color: inherit;
+    background-color: inherit;
+    text-decoration: none;
+    padding: 0 0.3rem;
+}
+
+.images hr {
+    margin: 0;
+    height: 20px;
+    color: white;
+}
+
+.log-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.file {
+    display: none;
 }

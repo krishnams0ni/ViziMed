@@ -1,17 +1,7 @@
-from flask import render_template, request, flash, redirect, url_for, session
-from models import db, User, Patient, PatientLog
-
-
-def check_credentials():
-    if 'user_id' not in session: return False
-    user = User.query.filter_by(id=session['user_id']).first()
-    return user and user.password == session.get('password')
-
-
-def confirm_patient_identity(id):
-    l = User.query.filter_by(id=session['user_id']).first().patients
-    l = [_.id for _ in l]
-    return id in l
+import os
+from flask import render_template, request, flash, redirect, url_for, session, send_from_directory
+from models import db, Patient, PatientLog
+from security import *
 
 
 def register_routes(app):
@@ -122,11 +112,10 @@ def register_routes(app):
 
     @app.route('/remove_patient/<int:id>', methods=['GET'])
     def remove_patient(id):
+        if not check_credentials(): return redirect(url_for('login'))
         if not confirm_patient_identity(id):
             flash("You are not authorized to remove this patient")
             return redirect(url_for('dashboard'))
-        if not check_credentials():
-            return redirect(url_for('login'))
 
         patient = Patient.query.filter_by(id=id).first()
         db.session.delete(patient)
@@ -137,19 +126,33 @@ def register_routes(app):
     @app.route('/patient_logs/<int:id>', methods=['POST', 'GET'])
     def patient_logs(id):
         if not confirm_patient_identity(id):
-            flash("You are not view logs for this patient")
+            flash("You are not authorized to view this patient's logs")
             return redirect(url_for('dashboard'))
         if not check_credentials(): return redirect(url_for('login'))
 
         logs = PatientLog.query.filter_by(patient_id=id).all()
         if request.method == 'POST':
-            date = request.form.get("date")
             notes = request.form.get("notes")
+            date = request.form.get("date")
             if date in [_.date for _ in logs]:
                 flash("Log already exists for this date")
                 return render_template("patient_logs.html", logs=logs, patient_id=id)
+
             new_log = PatientLog(patient_id=id, date=date, notes=notes)
             db.session.add(new_log)
+            db.session.commit()
+
+            file = request.files.get("file")
+            if file:
+                path = f"static/images/{new_log.id}_{file.filename}"
+                if os.path.exists(path):
+                    flash("Image already exists")
+                else:
+                    file.save(path)
+                    if new_log.images_path is None:
+                        new_log.images_path = []
+                    new_log.images_path.append(path)
+
             flash("Log added successfully")
             db.session.commit()
         else:
@@ -163,7 +166,19 @@ def register_routes(app):
         log = PatientLog.query.filter_by(id=id).first()
         if request.method == 'POST':
             log.date = request.form.get("date") or log.date
-            log.notes = request.form.get("notes") or log.notes
+            log.notes = request.form.get("notes")
+            file = request.files.get("file")
+
+            if file:
+                path = f"static/images/{id}_{file.filename}"
+                if os.path.exists(path):
+                    flash("Image already exists")
+                else:
+                    file.save(path)
+                    if log.images_path is None:
+                        log.images_path = []
+                    log.images_path.append(path)
+
             db.session.commit()
             flash("Log updated successfully")
             return redirect(url_for('patient_logs', id=log.patient_id))
@@ -189,10 +204,30 @@ def register_routes(app):
     def delete_log(id):
         if not check_credentials(): return redirect(url_for('login'))
         log = PatientLog.query.filter_by(id=id).first()
+        files = log.images_path
+        for file in files:
+            os.remove(file)
         db.session.delete(log)
         db.session.commit()
         flash("Log deleted successfully")
         return redirect(url_for('patient_logs', id=log.patient_id))
+
+    @app.route('/delete_image/<int:id>', methods=['GET'])
+    def delete_image(id):
+        if not check_credentials(): return redirect(url_for('login'))
+        log = PatientLog.query.filter_by(id=id).first()
+        path = log.images_path.pop()
+        os.remove(path)
+        db.session.commit()
+        flash("Image deleted successfully")
+        return redirect(url_for('patient_logs', id=log.patient_id))
+
+    @app.route('/image_functions', methods=['GET'])
+    def image_functions():
+        if not check_credentials(): return redirect(url_for('login'))
+        path = request.args.get('path')
+        relative_path = path[len('static/'):]
+        return send_from_directory('static', relative_path)
 
     @app.route('/logout')
     def logout():

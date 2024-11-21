@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import PickleType
+from sqlalchemy.ext.mutable import MutableList
 
 db = SQLAlchemy()
 
@@ -26,3 +28,4 @@ class PatientLog(db.Model):
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
     date = db.Column(db.String(80), nullable=False)
     notes = db.Column(db.Text)
+    images_path = db.Column(MutableList.as_mutable(PickleType), default=[])

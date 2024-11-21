@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='patient_logs.css') }}">
 
     <dialog id="addLogDialog">
-        <form action="{{ url_for('patient_logs', id=patient_id) }}" method="post">
+        <form enctype="multipart/form-data" action="{{ url_for('patient_logs', id=patient_id) }}" method="post">
             <div>
                 <label for="date">Date</label>
                 <input type="text" id="date" name="date" placeholder="Enter date" required>
@@ -20,6 +20,11 @@
                           placeholder="Enter note"></textarea>
             </div>
             <div>
+                <label for="file">Add Scans</label>
+                <br>
+                <input type="file" name="file" accept="image/*">
+            </div>
+            <div>
                 <button class="button" type="submit">Save</button>
                 <button class="button" type="button" onclick="document.getElementById('addLogDialog').close()">Cancel
                 </button>
@@ -28,10 +33,13 @@
     </dialog>
 
     <h3>ID {{ patient_id }}: {{ name }} Logs</h3>
-    <button class="button" onclick="document.getElementById('addLogDialog').showModal()">Add Log</button>
+    <button style="margin: 0 0 1rem 0" class="button" onclick="document.getElementById('addLogDialog').showModal()">Add
+        Log
+    </button>
     <div class="logs">
         {% for log in logs %}
-            <form action="{{ url_for('update_log', id=log.id) }}" method="post" id="form-log-{{ log.id }}">
+            <form enctype="multipart/form-data" action="{{ url_for('update_log', id=log.id) }}" method="post"
+                  id="form-log-{{ log.id }}">
                 <div class="log" id="edit-log-{{ log.id }}">
                     <div class="log-header">
                         <div>
@@ -44,10 +52,21 @@
                         </div>
                     </div>
                     <hr>
-                    <div>
+                    <div class="log-body">
                         <div class="log-notes" style="white-space: pre-wrap;">{{ log.notes }}</div>
                         <textarea name="notes" oninput="autoResize(this)" class="notes"
                                   style="display:none;">{{ log.notes }}</textarea>
+                        <input type="file" name="file" accept="image/*" class="file">
+                        <div>
+                            {% for path in log.images_path %}
+                                <div class="images">
+                                    <a href="{{ url_for('image_functions', path=path) }}"
+                                       target="_blank">{{ path.split("/")[-1] }}</a>
+                                    <hr>
+                                    <a href="{{ url_for('delete_image', id=log.id, path=path) }}">Delete</a>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </form>
@@ -64,6 +83,7 @@
             const notesSpan = form.querySelector('.log-notes');
             const dateInput = form.querySelector('.date');
             const notesInput = form.querySelector('.notes');
+            const fileInput = form.querySelector('.file');
 
             if (editLink.innerText === 'Edit') {
                 editLink.innerText = 'Save';
@@ -71,6 +91,7 @@
                 notesSpan.style.display = 'none';
                 dateInput.style.display = 'block';
                 notesInput.style.display = 'block';
+                fileInput.style.display = 'block';
                 autoResize(notesInput);
             } else {
                 form.submit();

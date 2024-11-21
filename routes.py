@@ -131,6 +131,8 @@ def register_routes(app):
         if not check_credentials(): return redirect(url_for('login'))
 
         logs = PatientLog.query.filter_by(patient_id=id).all()
+        if not os.path.exists('static/images'):
+            os.makedirs('static/images')
         if request.method == 'POST':
             notes = request.form.get("notes")
             date = request.form.get("date")

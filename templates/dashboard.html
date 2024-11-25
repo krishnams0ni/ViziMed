@@ -3,7 +3,7 @@
 {% block content %}
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
     {% if not info %}
-        <p>No patients found.</p>
+        <p style="font-size: 1.2rem; margin: 1rem 0;">No patients found.</p>
     {% endif %}
 
     <div class="cards">

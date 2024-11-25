@@ -11,7 +11,6 @@ def register_routes(app):
             flash("You are already logged in")
             return redirect(url_for('dashboard'))
         else:
-            flash("Welcome back!")
             return render_template("login.html")
 
     @app.route('/login', methods=['POST', 'GET'])
@@ -28,13 +27,10 @@ def register_routes(app):
                 return redirect(url_for('dashboard'))
             else:
                 flash("Invalid credentials")
-        else:
-            flash("Welcome back!")
         return render_template("login.html")
 
     @app.route('/register', methods=['POST', 'GET'])
     def register():
-        flash("Welcome!")
         if request.method == 'POST':
             username = request.form.get("username")
             password = request.form.get("password")

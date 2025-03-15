@@ -1,7 +1,17 @@
 body {
     background-color: #282828;
     color: white;
-    font-size: 1.025em;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
 }
 
 .flash {
@@ -25,34 +35,6 @@ body {
     display: block;
 }
 
-@keyframes fadeInOut {
-    0% {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-    10% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    50% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    90% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(5px);
-    }
-}
-
-body {
-    display: flex;
-    flex-direction: row;
-}
-
 #menu {
     width: 200px;
     padding: 1em;
@@ -61,6 +43,8 @@ body {
     align-items: center;
     justify-content: left;
     font-size: 1.2em;
+    height: 100vh;
+    position: sticky;
 }
 
 #menu a {
@@ -72,8 +56,14 @@ body {
 
 #content {
     width: 100%;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    position: relative;
     padding: 1em;
+    padding-bottom: 2em;
+    box-sizing: border-box;
 }
 
 .button {
@@ -94,13 +84,41 @@ textarea {
     height: auto;
 }
 
-input, textarea {
+input,
+textarea {
     width: fit-content;
     box-sizing: border-box;
     background-color: inherit;
-    border: 1px solid white;
     border-radius: 4px;
     color: white;
-    padding: 5px;
     outline: none;
+    font-size: 1em;
+    border: 1px solid #f8f8f8;
+    font-family: inherit;
+}
+
+hr {
+    border: 1px solid #e7e7e7;
+    margin: 0;
+    position: sticky;
+    z-index: 10;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    10%,
+    50%,
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(5px);
+    }
 }

@@ -1,102 +1,103 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Patient Logs
+Patient Logs
 {% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='patient_logs.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='patient_logs.css') }}">
 
-    <dialog id="addLogDialog">
-        <form enctype="multipart/form-data" action="{{ url_for('patient_logs', id=patient_id) }}" method="post">
-            <div>
-                <label for="date">Date</label>
-                <input type="text" id="date" name="date" placeholder="Enter date" required>
-            </div>
-            <div>
-                <label for="notes">Notes</label>
-                <br>
-                <textarea class="add_note" name="notes"
-                          placeholder="Enter note"></textarea>
-            </div>
-            <div>
-                <label for="file">Add Scans</label>
-                <br>
-                <input type="file" name="file" accept="image/*">
-            </div>
-            <div>
-                <button class="button" type="submit">Save</button>
-                <button class="button" type="button" onclick="document.getElementById('addLogDialog').close()">Cancel
-                </button>
-            </div>
-        </form>
-    </dialog>
+<dialog id="addLogDialog">
+    <form enctype="multipart/form-data" action="{{ url_for('patient_logs', id=patient_id) }}" method="post">
+        <div>
+            <label for="date">Date</label>
+            <input type="text" id="date" name="date" placeholder="Enter date" required>
+        </div>
+        <div>
+            <label for="notes">Notes</label>
+            <br>
+            <textarea class="add_note" name="notes" placeholder="Enter note"></textarea>
+        </div>
+        <div>
+            <label for="file">Add Scans</label>
+            <br>
+            <input type="file" name="file" accept="image/*">
+        </div>
+        <div>
+            <button class="button" type="submit">Save</button>
+            <button class="button" type="button" onclick="document.getElementById('addLogDialog').close()">Cancel
+            </button>
+        </div>
+    </form>
+</dialog>
 
-    <h3>ID {{ patient_id }}: {{ name }} Logs</h3>
-    <button style="margin: 0 0 1rem 0" class="button" onclick="document.getElementById('addLogDialog').showModal()">Add
-        Log
-    </button>
-    <div class="logs">
-        {% for log in logs %}
-            <form enctype="multipart/form-data" action="{{ url_for('update_log', id=log.id) }}" method="post"
-                  id="form-log-{{ log.id }}">
-                <div class="log" id="edit-log-{{ log.id }}">
-                    <div class="log-header">
-                        <div>
-                            <span class="log-date" class="options">{{ log.date }}</span>
-                            <input type="text" name="date" class="date" value="{{ log.date }}" style="display:none;">
-                        </div>
-                        <div class="options">
-                            <a class="remove button" href="{{ url_for('delete_log', id=log.id) }}">Delete</a>
-                            <a class="edit button" href="#" onclick="toggleEdit('{{ log.id }}', event)">Edit</a>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="log-body">
-                        <div class="log-notes" style="white-space: pre-wrap;">{{ log.notes }}</div>
-                        <textarea name="notes" oninput="autoResize(this)" class="notes"
-                                  style="display:none;">{{ log.notes }}</textarea>
-                        <input type="file" name="file" accept="image/*" class="file">
-                        <div>
-                            {% for path in log.images_path %}
-                                <div class="images">
-                                    <a href="{{ url_for('image_functions', path=path) }}"
-                                       target="_blank">{{ path.split("/")[-1] }}</a>
-                                    <hr>
-                                    <a href="{{ url_for('delete_image', id=log.id, path=path) }}">Delete</a>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+<h3>ID {{ patient_id }}: {{ name }} Logs</h3>
+<button style="margin: 0 0 1rem 0" class="button" onclick="document.getElementById('addLogDialog').showModal()">Add
+    Log
+</button>
+<div class="logs">
+    {% for log in logs %}
+    <form enctype="multipart/form-data" action="{{ url_for('update_log', id=log.id) }}" method="post"
+        id="form-log-{{ log.id }}">
+        <div class="log" id="edit-log-{{ log.id }}">
+            <div class="log-header">
+                <div>
+                    <span class="log-date" class="options">{{ log.date }}</span>
+                    <input type="text" name="date" class="date" value="{{ log.date }}" style="display:none;">
                 </div>
-            </form>
-        {% else %}
-            <p>No logs found.</p>
-        {% endfor %}
-    </div>
-    <script>
-        function toggleEdit(logID, event) {
-            event.preventDefault();
-            const form = document.getElementById(`form-log-${logID}`);
-            const editLink = form.querySelector('.edit');
-            const dateSpan = form.querySelector('.log-date');
-            const notesSpan = form.querySelector('.log-notes');
-            const dateInput = form.querySelector('.date');
-            const notesInput = form.querySelector('.notes');
-            const fileInput = form.querySelector('.file');
+                <div class="options">
+                    <a class="remove button" href="{{ url_for('delete_log', id=log.id) }}">Delete</a>
+                    <a class="edit button" href="#" onclick="toggleEdit('{{ log.id }}', event)">Edit</a>
+                </div>
+            </div>
+            <hr>
+            <div class="log-body">
+                <div>
+                    <pre class="log-notes">{{ log.notes }}</pre>
+                </div>
+                <textarea name="notes" oninput="autoResize(this)" class="notes"
+                    style="display:none;">{{ log.notes }}</textarea>
+                <input type="file" name="file" accept="image/*" class="file">
+                <div>
+                    {% for path in log.images_path %}
+                    <div class="images">
+                        <a href="{{ url_for('image_functions', path=path) }}" target="_blank">{{ path.split("/")[-1]
+                            }}</a>
+                        <hr>
+                        <a href="{{ url_for('delete_image', id=log.id, path=path) }}">Delete</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <p>No logs found.</p>
+    {% endfor %}
+</div>
+<script>
+    function toggleEdit(logID, event) {
+        event.preventDefault();
+        const form = document.getElementById(`form-log-${logID}`);
+        const editLink = form.querySelector('.edit');
+        const dateSpan = form.querySelector('.log-date');
+        const notesSpan = form.querySelector('.log-notes');
+        const dateInput = form.querySelector('.date');
+        const notesInput = form.querySelector('.notes');
+        const fileInput = form.querySelector('.file');
 
-            if (editLink.innerText === 'Edit') {
-                editLink.innerText = 'Save';
-                dateSpan.style.display = 'none';
-                notesSpan.style.display = 'none';
-                dateInput.style.display = 'block';
-                notesInput.style.display = 'block';
-                fileInput.style.display = 'block';
-                autoResize(notesInput);
-            } else {
-                form.submit();
-            }
+        if (editLink.innerText === 'Edit') {
+            editLink.innerText = 'Save';
+            dateSpan.style.display = 'none';
+            notesSpan.style.display = 'none';
+            dateInput.style.display = 'block';
+            notesInput.style.display = 'block';
+            fileInput.style.display = 'block';
+            autoResize(notesInput);
+        } else {
+            form.submit();
         }
-    </script>
+    }
+</script>
 
 {% endblock %}

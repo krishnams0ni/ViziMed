@@ -9,10 +9,15 @@
     border: 2px solid #e7e7e7;
     border-radius: 4px;
     padding: 0 .5rem;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
 }
 
-form div {
-    margin: 5px 0;
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .patient_info {
@@ -23,6 +28,10 @@ form div {
     font-size: 42px;
     text-decoration: none;
     color: white;
+    display: block;
+    white-space: nowrap;
+    overflow-x: auto;
+    text-overflow: ellipsis;
 }
 
 .patient_name:hover {
@@ -34,10 +43,36 @@ form div {
     justify-content: space-between;
 }
 
-.remove {
-    flex: 1
+.remove,
+.edit {
+    flex: 1;
 }
 
-.edit {
-    flex: 2
+.edit-input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.text {
+    white-space: nowrap;
+    overflow-x: auto;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
+}
+
+.patient-detail {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 5px;
+    align-items: center;
+    width: 100%;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }

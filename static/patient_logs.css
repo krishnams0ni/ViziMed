@@ -32,19 +32,9 @@
     margin: 0;
 }
 
-.remove {
-    flex: 1
-}
-
+.remove,
 .edit {
-    flex: 2
-}
-
-.log-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    justify-content: space-between;
+    flex: 1
 }
 
 .logs {
@@ -61,10 +51,61 @@
     border-radius: 10px;
 }
 
+#addLogDialog input {
+    margin: 0;
+}
+
+#addLogDialog button {
+    margin: 0;
+    margin-top: 10px;
+    font-size: 1.2rem;
+}
+
+.log-date {
+    display: block;
+    white-space: nowrap;
+    overflow-x: auto;
+    text-overflow: ellipsis;
+}
+
+.log-header {
+    display: flex;
+    flex-direction: column;
+    min-width: 20%;
+    max-width: 20%;
+    gap: 0.5rem;
+}
+
+.log-header input {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+input {
+    padding: 0.3rem;
+    margin: 0.3rem;
+}
+
 textarea {
-    width: 100%;
+    min-height: 75px;
     height: 300px;
-    overflow-y: hidden;
+    width: 100%;
+    overflow-y: auto;
+    border: 1px solid #e7e7e7;
+    border-radius: 4px;
+    padding: 0.3rem;
+    white-space: pre-wrap;
+}
+
+.log-notes {
+    border: 1px solid #e7e7e7;
+    border-radius: 4px;
+    padding: 0.3rem;
+    white-space: pre-wrap;
+    margin: 0;
+    min-height: 75px;
+    font-family: inherit;
 }
 
 .images {
@@ -92,9 +133,10 @@ textarea {
 .log-body {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
 }
 
 .file {
     display: none;
+    margin: 0;
+    margin-top: 0.5rem;
 }

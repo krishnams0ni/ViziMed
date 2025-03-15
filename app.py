@@ -10,7 +10,7 @@ def create_app():
     app.config.from_object(Config)
     db.init_app(app)
     with app.app_context():
-        if not os.path.exists('users.db'):
+        if not os.path.exists("users.db"):
             db.create_all()
             print("Database created!")
     register_routes(app)

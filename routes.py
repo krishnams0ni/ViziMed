@@ -224,16 +224,19 @@ def register_routes(app):
     def image_functions():
         if not check_credentials(): return redirect(url_for('login'))
         path = request.args.get('path')
+        if not path or not path.startswith('static/'):
+            flash("Invalid path")
+            return redirect(url_for('dashboard'))
         relative_path = path[len('static/'):]
         return send_from_directory('static', relative_path)
 
-    @app.route('/logout')
+    @app.route('/logout', methods=['GET'])
     def logout():
         session.pop('user_id', None)
         flash("Logged out successfully")
         return redirect(url_for('login'))
 
-    @app.route('/delete_account')
+    @app.route('/delete_account', methods=['POST'])
     def delete_account():
         if not check_credentials(): return redirect(url_for('login'))
         id = session['user_id']

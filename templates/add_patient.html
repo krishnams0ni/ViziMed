@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Add Patient
+Add Patient
 {% endblock %}
 
 {% block content %}
-    <title>Add Patient</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='add_patient.css') }}">
-    <div>
-        <form action="/add_patient" method="post">
-            <div>
-                <input type="text" name="name" id="name" placeholder="Name" required>
-                <input type="text" name="dob" id="dob" placeholder="DoB">
-            </div>
-            <div>
-                <input type="text" name="phone" id="phone" placeholder="Phone">
-                <input type="text" name="email" id="email" placeholder="Email">
-            </div>
-            <div>
-                <input type="text" name="address" id="address" placeholder="Address">
-            </div>
-            <input class="button" type="submit" value="Add Patient">
-        </form>
-    </div>
-{% endblock %}s
+<title>Add Patient</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='add_patient.css') }}">
+<div>
+    <form action="/add_patient" method="post">
+        <div>
+            <input type="text" name="name" id="name" placeholder="Name" required>
+            <input type="text" name="dob" id="dob" placeholder="DoB">
+        </div>
+        <div>
+            <input type="text" name="phone" id="phone" placeholder="Phone">
+            <input type="text" name="email" id="email" placeholder="Email">
+        </div>
+        <div>
+            <input type="text" name="address" id="address" placeholder="Address">
+        </div>
+        <input class="button" type="submit" value="Add Patient">
+    </form>
+</div>
+{% endblock %}

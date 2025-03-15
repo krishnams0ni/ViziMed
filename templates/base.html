@@ -1,43 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Dashboard{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
 </head>
+
 <body>
-<div class="flash {% if get_flashed_messages() %}visible{% endif %}">
-    {% with messages = get_flashed_messages() %}
+    <div class="flash {% if get_flashed_messages() %}visible{% endif %}">
+        {% with messages = get_flashed_messages() %}
         {% if messages %}
-            {{ messages[0] }}
+        {{ messages[0] }}
         {% endif %}
-    {% endwith %}
-</div>
+        {% endwith %}
+    </div>
+    <div id="menu">
+        <a href="{{ url_for('dashboard') }}">
+            <div>Dashboard</div>
+        </a>
+        <a href="{{ url_for('add_patient') }}">
+            <div>Add Patient</div>
+        </a>
+        <a href="{{ url_for('profile') }}">
+            <div>Profile</div>
+        </a>
+        <a href="{{ url_for('logout') }}">
+            <div>Logout</div>
+        </a>
+    </div>
+    
+    <hr>
 
-<div id="menu">
-    <a href="{{ url_for('dashboard') }}">
-        <div>Dashboard</div>
-    </a>
-    <a href="{{ url_for('add_patient') }}">
-        <div>Add Patient</div>
-    </a>
-    <a href="{{ url_for('profile') }}">
-        <div>Profile</div>
-    </a>
-    <a href="{{ url_for('logout') }}">
-        <div>Logout</div>
-    </a>
-</div>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
 
-<div id="content">
-    {% block content %}{% endblock %}
-</div>
-
-<script>
-    function autoResize(textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = (textarea.scrollHeight) + 'px';
-    }
-</script>
+    <script>
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+    </script>
 </body>
+
 </html>

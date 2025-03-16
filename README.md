@@ -1,6 +1,8 @@
 # ViziMed
 
-ViziMed is a web application designed for medical professionals to manage patient information, track patient visits, and store medical scans and notes securely.
+ViziMed is a web application designed for medical professionals to manage patient information, track patient visits, and store medical scans and notes securely. 
+
+Try here - https://krishnams0ni.pythonanywhere.com/ (Best viewed on desktop)
 
 ## Features
 
@@ -9,6 +11,8 @@ ViziMed is a web application designed for medical professionals to manage patien
 - Medical logs for each patient with date tracking
 - Image upload capability for medical scans
 - Responsive UI for desktop use
+
+https://github.com/user-attachments/assets/56b8fa68-680e-40fe-b5e5-1f7da0d14093
 
 ## Tech Stack
 

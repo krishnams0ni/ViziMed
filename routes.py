@@ -1,14 +1,15 @@
 import os
 from flask import (
     render_template,
-    request,
     flash,
     redirect,
     url_for,
-    session,
     send_from_directory,
+    request,
+    session,
 )
 from models import db, Patient, PatientLog
+from werkzeug.security import generate_password_hash, check_password_hash
 from security import *
 
 
@@ -27,10 +28,10 @@ def register_routes(app):
             username = request.form.get("username")
             password = request.form.get("password")
             user = User.query.filter_by(username=username).first()
-            if user and user.password == password:
+            if user and check_password_hash(user.password, password):
                 session["user_id"] = user.id
                 session["username"] = user.username
-                session["password"] = user.password
+                session["authenticated"] = True
                 flash("Logged in successfully")
                 return redirect(url_for("dashboard"))
             else:
@@ -50,7 +51,8 @@ def register_routes(app):
             elif User.query.filter_by(username=username).first():
                 flash("Username already exists")
             else:
-                new_user = User(username=username, password=password)
+                hashed_password = generate_password_hash(password)
+                new_user = User(username=username, password=hashed_password)
                 db.session.add(new_user)
                 db.session.commit()
                 flash("Account created successfully")
@@ -71,7 +73,6 @@ def register_routes(app):
             return redirect(url_for("login"))
         id = session["user_id"]
         name = User.query.filter_by(id=id).first().username
-        password = User.query.filter_by(id=id).first().password
         if request.method == "POST":
             new_password = request.form.get("password")
             new_username = request.form.get("username")
@@ -84,12 +85,12 @@ def register_routes(app):
                 if new_password != confirm_password:
                     flash("Passwords do not match")
                 else:
-                    user.password = new_password
+                    hashed_password = generate_password_hash(new_password)
+                    user.password = hashed_password
                     db.session.commit()
                     flash("Password updated successfully")
-                    session["password"] = new_password
             if new_username:
-                if new_username in [_.username for _ in User.query.all()]:
+                if User.query.filter_by(username=new_username).first():
                     flash("Username already exists")
                 else:
                     user.username = new_username
@@ -97,7 +98,7 @@ def register_routes(app):
                     flash("Username updated successfully")
                     session["username"] = new_username
             return redirect(url_for("profile"))
-        return render_template("profile.html", name=name, password=password)
+        return render_template("profile.html", name=name)
 
     @app.route("/add_patient", methods=["POST", "GET"])
     def add_patient():
@@ -169,11 +170,11 @@ def register_routes(app):
                     if new_log.images_path is None:
                         new_log.images_path = []
                     new_log.images_path.append(path)
-
             flash("Log added successfully")
             db.session.commit()
         else:
             flash("Logs retrieved successfully")
+
         logs = PatientLog.query.filter_by(patient_id=id).all()
         return render_template(
             "patient_logs.html",
@@ -243,10 +244,17 @@ def register_routes(app):
         if not check_credentials():
             return redirect(url_for("login"))
         log = PatientLog.query.filter_by(id=id).first()
-        path = log.images_path.pop()
-        os.remove(path)
-        db.session.commit()
-        flash("Image deleted successfully")
+        path = request.args.get("path")
+
+        if path in log.images_path:
+            log.images_path.remove(path)
+            if os.path.exists(path):
+                os.remove(path)
+            db.session.commit()
+            flash("Image deleted successfully")
+        else:
+            flash("Image not found")
+
         return redirect(url_for("patient_logs", id=log.patient_id))
 
     @app.route("/image_functions", methods=["GET"])
@@ -262,7 +270,7 @@ def register_routes(app):
 
     @app.route("/logout", methods=["GET"])
     def logout():
-        session.pop("user_id", None)
+        session.clear()
         flash("Logged out successfully")
         return redirect(url_for("login"))
 
@@ -272,8 +280,19 @@ def register_routes(app):
             return redirect(url_for("login"))
         id = session["user_id"]
         user = User.query.filter_by(id=id).first()
+
+        patients = Patient.query.filter_by(user_id=id).all()
+        for patient in patients:
+            logs = PatientLog.query.filter_by(patient_id=patient.id).all()
+            for log in logs:
+                if log.images_path:
+                    for image_path in log.images_path:
+                        if os.path.exists(image_path):
+                            os.remove(image_path)
+
         db.session.delete(user)
         db.session.commit()
+
         session.pop("user_id", None)
         flash("Account deleted successfully")
         return redirect(url_for("login"))

@@ -77,6 +77,7 @@ body {
     background-color: inherit;
     width: fit-content;
     text-align: center;
+    font-family: inherit;
 }
 
 textarea {
@@ -102,6 +103,31 @@ hr {
     margin: 0;
     position: sticky;
     z-index: 10;
+}
+
+
+::-webkit-scrollbar {
+    height: 6px;
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #333333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #666666;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #888888;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #666666 #333333;
 }
 
 @keyframes fadeInOut {

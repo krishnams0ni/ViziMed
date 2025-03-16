@@ -82,6 +82,7 @@ ViziMed is a web application designed for medical professionals to manage patien
 
 ## Data Security
 
+- User passwords are hashed for secure storage
 - Patient data is stored locally in an SQLite database
 - Images are stored in the `/static/images` directory
 - User authentication is required to access any patient data

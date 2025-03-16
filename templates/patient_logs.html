@@ -52,13 +52,12 @@ Patient Logs
             </div>
             <hr>
             <div class="log-body">
-                <div>
-                    <pre class="log-notes">{{ log.notes }}</pre>
-                </div>
+                <pre class="log-notes">{{ log.notes }}</pre>
                 <textarea name="notes" oninput="autoResize(this)" class="notes"
                     style="display:none;">{{ log.notes }}</textarea>
                 <input type="file" name="file" accept="image/*" class="file">
-                <div>
+                {% if log.images_path %}
+                <div class="images-container">
                     {% for path in log.images_path %}
                     <div class="images">
                         <a href="{{ url_for('image_functions', path=path) }}" target="_blank">{{ path.split("/")[-1]
@@ -68,6 +67,7 @@ Patient Logs
                     </div>
                     {% endfor %}
                 </div>
+                {% endif %}
             </div>
         </div>
     </form>

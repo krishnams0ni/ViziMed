@@ -108,6 +108,14 @@ textarea {
     font-family: inherit;
 }
 
+
+.images-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    width: fit-content;
+}
+
 .images {
     display: flex;
     flex-direction: row;
@@ -133,10 +141,11 @@ textarea {
 .log-body {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
+    
 }
 
 .file {
     display: none;
     margin: 0;
-    margin-top: 0.5rem;
 }

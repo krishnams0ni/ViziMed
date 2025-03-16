@@ -1,35 +1,48 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    User Profile
-{% endblock %}
+{% block title %}User Profile{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
-    <div class="existing_details">
-        <p>Current Username: {{ name }}</p>
-        <p>Current Password: {{ password }}</p>
-    </div>
-    <hr>
-    <div class="update_details">
-        <div>
-            <p>Update Username:</p>
-            <form action="/profile" method="post">
-                <input type="text" name="username" id="username" placeholder="Username">
-                <input class="button" type="submit" value="Update">
-            </form>
+<link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+<div class="profile-container">
+    <div class="profile-section">
+        <div class="existing_details">
+            <h3>Account Information</h3>
+            <p>Current Username: {{ name }}</p>
+            <p>Current Password: {{ password }}</p>
         </div>
-        <div>
-            <p>Update Password:</p>
-            <form action="/profile" method="post">
-                <input type="password" name="password" id="password" placeholder="Password">
-                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
-                <input class="button" type="submit" value="Update">
-            </form>
+
+        <div class="update_details">
+            <div class="update-form">
+                <p>Update Username:</p>
+                <form action="/profile" method="post">
+                    <input type="text" name="username" id="username" placeholder="Username">
+                    <input class="button" type="submit" value="Update">
+                </form>
+            </div>
+
+            <div class="update-form">
+                <p>Update Password:</p>
+                <form action="/profile" method="post">
+                    <input type="password" name="password" id="password" placeholder="Password">
+                    <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                    <input class="button" type="submit" value="Update">
+                </form>
+            </div>
         </div>
-        <hr>
-        <a id="delete_account" href="{{ url_for('delete_account') }}">
-            <button style="background-color: #770000" class="button">Delete Account</button>
-        </a>
+
+        <div class="danger-zone">
+            <h3>Danger Zone</h3>
+            <a id="delete_account" href="{{ url_for('delete_account') }}">
+                <button class="button danger-button">Delete Account</button>
+            </a>
+        </div>
     </div>
+</div>
+
+<script>
+    document.getElementById('delete_account').onclick = function () {
+        return confirm('Are you sure you want to delete your account?');
+    }
+</script>
 {% endblock %}

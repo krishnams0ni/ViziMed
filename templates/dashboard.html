@@ -67,6 +67,7 @@
 
         if (editLink.innerText === 'Edit') {
             inputs.forEach(input => input.style.display = 'inline-block');
+            inputs.forEach(input => input.style.border = '1.5px solid white');
             texts.forEach(text => text.style.display = 'none');
             editLink.innerText = 'Save';
         } else {
